@@ -1,0 +1,64 @@
+<form action="/insertData" method="post">
+    <table align="center" border="">
+        <caption><h2>Edit user data</h2></caption>
+        <tr>
+            <th>Name</th>
+            <td>
+                <input type="text" name="name" value="<%= user.name  %>" id="">
+                <input type="hidden" name="id" value="<%= user._id  %>" id="">
+            </td>
+        </tr>
+        <tr>
+            <th>email</th>
+            <td><input type="text" name="email" value="<%= user.email %>" id=""></td>
+        </tr>
+        <tr>
+            <th>password</th>
+            <td><input type="text" name="password" value="<%= user.password %>" id=""></td>
+        </tr>
+        <tr>
+            <th>gender</th>
+            <td>
+                <input type="radio" name="gender" value="male" <% if(user.gender == "male"){  %> checked  <%  } %> id=""> male
+                <input type="radio" name="gender" value="female" <% if(user.gender == "female"){  %> checked  <%  } %>   id="">female
+            </td>
+        </tr>
+        <tr>
+            <th>hobby</th>
+            <td>
+                <input type="checkbox" name="hobby" value="dancing" id="" <% if(user.hobby.includes("dancing")) {  %> checked  <%  } %>  >dancing
+                <input type="checkbox" name="hobby" value="reading" id="" <% if(user.hobby.includes("reading")) {  %> checked  <%  } %> >reading
+                <input type="checkbox" name="hobby" value="writing" id="" <% if(user.hobby.includes("writing")) {  %> checked  <%  } %> >writing
+            </td>
+        </tr>
+        <tr>
+            <th>city</th>
+            <td>
+                <select name="city" id="">
+                    <option value="">--select city--</option>
+
+                    <% 
+                        let city = ["surat","vadodra","rajkot"];
+                        city.map((val)=>{
+
+                    %>
+
+                    <option <% if(user.city == val ) { %> selected <% } %>  value="<%= val %>"><%= val %></option>        
+
+                    <%
+                        })
+                    %>
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>phone</th>
+            <td><input type="text" name="phone" id=""  value="<%= user.phone  %>" ></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><input type="submit"></td>
+        </tr>
+    </table>
+</form>
