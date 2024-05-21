@@ -1,6 +1,8 @@
 const express = require('express');
 const user = require('./models/user.Schema');
 const db = require('./config/database');
+const multer = require('multer');
+const path = require('path')
 
 const port = 8081;
 
@@ -8,6 +10,25 @@ const app = express();
 
 app.set('view engine','ejs');
 app.use(express.urlencoded({extended:true}))
+
+//app.use('/uploads',express.static(path.join(__dirname+'/uploads')))
+
+app.use('/uploads',express.static('uploads'))
+
+//file upload start
+
+const fileUpload = multer.diskStorage({
+    destination : (req,file,cb)=>{
+        cb(null,'uploads');
+    },
+    filename : (req,file,cb)=>{
+        cb(null,file.originalname);
+    }
+})
+
+const imageUpload = multer({storage: fileUpload}).single('image');
+
+//file upload end
 
 app.get('/',(req,res)=>{
 
@@ -23,7 +44,7 @@ app.get('/',(req,res)=>{
     
 })
 
-app.post('/insertData',(req,res)=>{
+app.post('/insertData',imageUpload,(req,res)=>{
     const {id,name,email,password,gender,hobby,city,phone}=req.body
 
     if(id){
@@ -37,14 +58,21 @@ app.post('/insertData',(req,res)=>{
         })
     }
     else{
-        user.create({name,email,password,gender,hobby,city,phone})
-    .then((data)=>{
-        console.log("data inserted.");
-        return res.redirect('/');
-    }).catch((err)=>{
-        console.log(err);
-        return false;
-    })
+ 
+        let image = "";
+        
+        if(req.file){   
+            image = req.file.path;
+        }
+
+            user.create({name,email,password,gender,hobby,city,phone,image})
+        .then((data)=>{
+            console.log("data inserted.");
+            return res.redirect('/');
+        }).catch((err)=>{
+            console.log(err);
+            return false;
+        })
     }
     
 })

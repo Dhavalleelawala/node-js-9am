@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/insertData" method="post">
+    <form action="/insertData" method="post" enctype="multipart/form-data" >
         <table align="center" border="">
             <caption><h2>add user data</h2></caption>
             <tr>
@@ -62,6 +62,10 @@
                 <td><input type="text" name="phone" id=""></td>
             </tr>
             <tr>
+                <th>image</th>
+                <td><input type="file" name="image" id=""></td>
+            </tr>
+            <tr>
                 <th></th>
                 <td><input type="submit"></td>
             </tr>
@@ -78,11 +82,12 @@
                 <th>hobby</th>
                 <th>city</th>
                 <th>phone</th>
+                <th>image</th>
                 <th>action</th>
             </tr>
             
             <% user.map((val)=> {
-                let {_id,name,email,password,gender,hobby,city,phone} = val;
+                let {_id,name,email,password,gender,hobby,city,phone,image} = val;
             %>
               
             <tr>
@@ -93,6 +98,9 @@
                 <td><%= hobby %></td>
                 <td><%= city %></td>
                 <td><%= phone %></td>
+                <td>
+                    <img src="<%= image %>" alt="image" width="100px" height="100px">
+                </td>
                 <td>
                     <a href="/deleteData?id=<%= _id %>">Delete</a>
                     <a href="/editData/<%= _id %>">Edit</a>
