@@ -1,4 +1,4 @@
-<form action="/insertData" method="post" >
+<form action="/insertData" method="post" enctype="multipart/form-data" >
     <table align="center" border="">
         <caption><h2>Edit user data</h2></caption>
         <tr>
@@ -55,6 +55,13 @@
         <tr>
             <th>phone</th>
             <td><input type="text" name="phone" id=""  value="<%= user.phone  %>" ></td>
+        </tr>
+        <tr>
+            <th>image</th>
+            <td>
+                <input type="file" name="image" id="">
+                <img src="../<%= user.image  %>" alt="image" width="100px" height="100px">
+            </td>
         </tr>
         <tr>
             <th></th>

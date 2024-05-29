@@ -3,6 +3,8 @@ const user = require('./models/user.Schema');
 const db = require('./config/database');
 const multer = require('multer');
 const path = require('path')
+const fs = require('fs');
+
 
 const port = 8081;
 
@@ -48,14 +50,56 @@ app.post('/insertData',imageUpload,(req,res)=>{
     const {id,name,email,password,gender,hobby,city,phone}=req.body
 
     if(id){
-        user.findByIdAndUpdate(id,{name,email,password,gender,hobby,city,phone}).then((data)=>{
-            console.log("data updated.");
-            //id=''
-            return res.redirect('/');
-        }).catch((err)=>{
-            console.log(err);
-            return false;
-        })
+
+        if(req.file){
+            let image = req.file.path;
+
+            user.findById(id).then((singleRecode)=>{
+                fs.unlinkSync(singleRecode.image);
+                //console.log(singleRecode);
+            }).catch((err)=>{
+                console.log(err);
+                return false;
+            })
+
+            user.findByIdAndUpdate(id,{name,email,password,gender,hobby,city,phone,image}).then((data)=>{
+                console.log("data updated.");
+                //id=''
+                return res.redirect('/');
+            }).catch((err)=>{
+                console.log(err);
+                return false;
+            })
+            
+        }else{
+            console.log("old image");
+
+            // user.findById(id).then((oldRecode)=>{
+            //     let image =  oldRecode.image;
+            //     user.findByIdAndUpdate(id,{name,email,password,gender,hobby,city,phone,image}).then((data)=>{
+            //         console.log("data updated.");
+            //         //id=''
+            //         return res.redirect('/');
+            //     }).catch((err)=>{
+            //         console.log(err);
+            //         return false;
+            //     })
+            // }).catch((err)=>{
+            //     console.log(err);
+            //     return false;
+            // })
+
+            user.findByIdAndUpdate(id,{name,email,password,gender,hobby,city,phone}).then((data)=>{
+                console.log("data updated.");
+                //id=''
+                return res.redirect('/');
+            }).catch((err)=>{
+                console.log(err);
+                return false;
+            })
+        }
+
+       
     }
     else{
  
@@ -80,6 +124,14 @@ app.post('/insertData',imageUpload,(req,res)=>{
 app.get('/deleteData',(req,res)=>{
     let id =req.query.id;
     console.log(id);
+
+    user.findById(id).then((singleRecode)=>{
+        fs.unlinkSync(singleRecode.image);
+        //console.log(singleRecode);
+    }).catch((err)=>{
+        console.log(err);
+        return false;
+    })
 
     user.findByIdAndDelete(id).then((data)=>{
         console.log("data deleted.");
